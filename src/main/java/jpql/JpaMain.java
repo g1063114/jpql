@@ -1,6 +1,7 @@
 package jpql;
 
 import javax.persistence.*;
+import java.util.List;
 
 public class JpaMain {
     public static void main(String[] args) {
@@ -17,14 +18,12 @@ public class JpaMain {
             member.setAge(10);
             em.persist(member);
 
-            em.createQuery("select m from Member m", Member.class)
-                    .getSingleResult();
+            List<MemberDTO> result = em.createQuery("select new jpql.MemberDTO(m.username, m.age) from Member m", MemberDTO.class)
+                    .getResultList();
 
-            em.createQuery("select o.address from Order o", Address.class)
-                    .getSingleResult();
-
-            em.createQuery("select m.username, m.age from Member m", Member.class)
-                    .getSingleResult();
+            MemberDTO memberDTO = result.get(0);
+            System.out.println("memberDTO = " + memberDTO.getUsername());
+            System.out.println("memberDTO.getAge() = " + memberDTO.getAge());
 
             tx.commit();
         }catch (Exception e){
