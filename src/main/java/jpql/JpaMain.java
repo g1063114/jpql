@@ -17,11 +17,14 @@ public class JpaMain {
             member.setAge(10);
             em.persist(member);
 
-            Member result = em.createQuery("select m from Member m where m.username =:username", Member.class)
-                    .setParameter("username", "member1")
+            em.createQuery("select m from Member m", Member.class)
                     .getSingleResult();
 
-            System.out.println("result = " + result.getUsername());
+            em.createQuery("select o.address from Order o", Address.class)
+                    .getSingleResult();
+
+            em.createQuery("select m.username, m.age from Member m", Member.class)
+                    .getSingleResult();
 
             tx.commit();
         }catch (Exception e){
